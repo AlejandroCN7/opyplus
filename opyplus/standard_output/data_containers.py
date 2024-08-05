@@ -82,12 +82,11 @@ class DataContainer:
         )
 
         # remove empty rows with no data
-        self.df.dropna(how="all", subset=(c for c in self.df.columns if c not in self.instant_columns), inplace=True)
+        self.df = self.df.dropna(how="all", subset=(c for c in self.df.columns if c not in self.instant_columns))
 
         # rename columns
-        self.df.rename(
-            columns=dict((var.code, f"{var.key_value.lower()},{var.name}") for var in self.variables_by_code.values()),
-            inplace=True
+        self.df = self.df.rename(
+            columns=dict((var.code, f"{var.key_value.lower()},{var.name}") for var in self.variables_by_code.values())
         )
 
         # remove creation data (for memory usage)
@@ -164,7 +163,6 @@ class DataContainer:
             ) from None
 
         # drop temporary columns
-        self.df.drop(
-            columns=list(c for c in ("year", "month", "day", "hour", "minute") if c not in self.instant_columns),
-            inplace=True
+        self.df = self.df.drop(
+            columns=list(c for c in ("year", "month", "day", "hour", "minute") if c not in self.instant_columns)
         )

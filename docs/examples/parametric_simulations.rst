@@ -263,7 +263,7 @@ Plot
 
     df = pd.DataFrame().from_dict(results).T
 
-    df.sort_values(by=["sensible"], inplace=True)
+    df = df.sort_values(by=["sensible"])
 
     title = """'Zone Air Terminal Sensible Energy' relative difference
     (compared to baseline)"""
@@ -285,7 +285,7 @@ This building model is more sensible to heating setpoint than to other parameter
 
 .. testcode::
 
-    df.sort_values(by=["total"], inplace=True)
+    df = df.sort_values(by=["total"])
 
     cross_dependency_fig = go.Figure(
         data=[go.Scatter(

@@ -479,14 +479,12 @@ class WeatherData:
             df["year"] = self._weather_series.index.shift(-1).map(lambda x: x.year)
 
         # fill nans by default values
-        df.fillna(
-            value={k: v[1] for k, v in COLUMNS.items() if v[1] is not None and v[2] is not str},
-            inplace=True
+        df = df.fillna(
+            value={k: v[1] for k, v in COLUMNS.items() if v[1] is not None and v[2] is not str}
         )
-        df.replace(
+        df = df.replace(
             to_replace="",
-            value={k: v[1] for k, v in COLUMNS.items() if v[1] is not None and v[2] is str},
-            inplace=True
+            value={k: v[1] for k, v in COLUMNS.items() if v[1] is not None and v[2] is str}
         )
 
         # generate content
@@ -519,21 +517,19 @@ def _sanitize_weather_series(df):
     for k, v in COLUMNS.items():
         if v[2] is str:
             if v[1] is None:
-                df[k].fillna(value="", inplace=True)
+                df = df[k].fillna(value="")
             else:
-                df[k].replace(
+                df = df[k].replace(
                     to_replace=v[1],
-                    value="",
-                    inplace=True,
+                    value=""
                 )
         else:
             if v[1] is None:
-                df[k].fillna(value=np.nan, inplace=True)
+                df = df[k].fillna(value=np.nan)
             else:
-                df[k].replace(
+                df = df[k].replace(
                     to_replace=v[1],
-                    value=np.nan,
-                    inplace=True,
+                    value=np.nan
                 )
 
     # check that all used columns with no missing value aren't null
