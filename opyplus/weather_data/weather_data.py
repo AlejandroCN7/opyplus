@@ -503,44 +503,44 @@ class WeatherData:
 
 
 def _sanitize_weather_series(df):
-    # copy df (we will modify it)
-    df = df.copy()
-
     # check dataframe
     if not isinstance(df, pd.DataFrame):
         raise TypeError("Weather series must be a pandas DataFrame.")
 
+     # copy df (we will modify it)
+    df_copy = df.copy()
+
     # create df
-    df = pd.DataFrame(collections.OrderedDict((k, df.get(k)) for k in COLUMNS))
+    df_copy = pd.DataFrame(collections.OrderedDict((k, df_copy.get(k)) for k in COLUMNS))
 
     # replace all missing values, unfortunately since pandas 1.1.0 we have to iterate on columns
     for k, v in COLUMNS.items():
         if v[2] is str:
             if v[1] is None:
-                df = df[k].fillna(value="")
+                df_copy[k] = df_copy[k].fillna(value="")
             else:
-                df = df[k].replace(
+                df_copy[k] = df_copy[k].replace(
                     to_replace=v[1],
                     value=""
                 )
         else:
             if v[1] is None:
-                df = df[k].fillna(value=np.nan)
+                df_copy[k] = df_copy[k].fillna(value=np.nan)
             else:
-                df = df[k].replace(
+                df_copy[k] = df_copy[k].replace(
                     to_replace=v[1],
                     value=np.nan
                 )
 
     # check that all used columns with no missing value aren't null
     not_null = [k for k, v in COLUMNS.items() if (v[0] and v[1] is None)]
-    if df[not_null].isnull().sum().sum() > 0:
+    if df_copy[not_null].isnull().sum().sum() > 0:
         raise ValueError(
-            f"given dataframe contains empty values on some mandatory columns:\n{df[not_null].isnull().sum()}"
+            f"given dataframe contains empty values on some mandatory columns:\n{df_copy[not_null].isnull().sum()}"
         )
 
     # force dtypes
-    df = df.astype({k: v[2] for k, v in COLUMNS.items()})
+    df_copy = df_copy.astype({k: v[2] for k, v in COLUMNS.items()})
 
     # return
-    return df
+    return df_copy
