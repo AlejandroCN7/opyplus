@@ -9,6 +9,8 @@ from pandas.testing import assert_index_equal
 from ..util import multi_mode_write, get_mono_line_copyright_message, to_buffer
 from ..exceptions import DatetimeInstantsCreationError
 
+pd.set_option('future.no_silent_downcasting', True)
+
 WEEK_DAYS = ("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
 
 # AuxiliaryPrograms, p25, 63
@@ -507,7 +509,7 @@ def _sanitize_weather_series(df):
     if not isinstance(df, pd.DataFrame):
         raise TypeError("Weather series must be a pandas DataFrame.")
 
-     # copy df (we will modify it)
+    # copy df (we will modify it)
     df_copy = df.copy()
 
     # create df
